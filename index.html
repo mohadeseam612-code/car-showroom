@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="نمونه آزمایشی وب‌سایت نمایشگاه خودروی نوا موتورز">
+  <title>نوا موتورز | NAVA MOTORS</title>
+  <style>
+    :root {
+      --ink: #11110f;
+      --paper: #eee7db;
+      --paper-muted: #bdb4a7;
+      --wine: #671f26;
+      --wine-bright: #a33c44;
+      --line: rgba(238, 231, 219, .16);
+      --panel: #191816;
+      --radius: 26px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--paper);
+      background: var(--ink);
+      font-family: Tahoma, Arial, sans-serif;
+      line-height: 1.8;
+    }
+    button, a { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    button { color: inherit; }
+    .container { width: min(1180px, calc(100% - 40px)); margin-inline: auto; }
+    .eyebrow { color: var(--paper-muted); font-size: .78rem; letter-spacing: .14em; }
+    .demo-note {
+      padding: 12px 20px;
+      border-block: 1px solid var(--line);
+      color: var(--paper-muted);
+      background: #151412;
+      text-align: center;
+      font-size: .82rem;
+    }
+
+    header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 30;
+      background: linear-gradient(#11110ff0, #11110f80, transparent);
+    }
+    .nav {
+      min-height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: flex; align-items: baseline; gap: 12px; font-weight: 800; }
+    .brand small { color: var(--paper-muted); letter-spacing: .28em; font-size: .62rem; }
+    .nav-links { display: flex; align-items: center; gap: 24px; font-size: .9rem; }
+    .nav-links a { color: var(--paper-muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--paper); }
+    .lang {
+      display: flex;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .lang button { border: 0; background: transparent; padding: 7px 12px; cursor: pointer; }
+    .lang button.active { background: var(--wine); }
+    .menu-toggle { display: none; border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 8px 14px; }
+
+    .hero { position: relative; }
+    .scene {
+      min-height: 100vh;
+      position: relative;
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at var(--x, 38%) 48%, var(--glow, rgba(126,37,46,.46)), transparent 27%),
+        linear-gradient(120deg, #090909, #1b1413 50%, #08090a);
+    }
+    .scene::before {
+      content: "";
+      position: absolute;
+      width: min(820px, 86vw);
+      height: min(245px, 27vw);
+      left: 50%;
+      top: 53%;
+      transform: translate(-50%, -50%) skewX(-12deg);
+      border-radius: 55% 48% 24% 19% / 70% 65% 25% 28%;
+      background:
+        radial-gradient(circle at 18% 78%, #050505 0 8%, #4b4440 9% 10%, transparent 11%),
+        radial-gradient(circle at 78% 78%, #050505 0 8%, #4b4440 9% 10%, transparent 11%),
+        linear-gradient(175deg, transparent 0 34%, rgba(218,205,187,.11) 35%, rgba(30,28,26,.96) 43% 76%, #090909 77%);
+      filter: drop-shadow(0 36px 36px #000);
+      opacity: var(--car-opacity, .62);
+    }
+    .scene::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.045), transparent);
+      transform: translateX(-100%);
+      animation: sheen 7s infinite;
+    }
+    @keyframes sheen { 55%,100% { transform: translateX(100%); } }
+    .scene-copy { position: relative; z-index: 2; max-width: 720px; padding-block: 120px 70px; }
+    .scene-count { color: var(--wine-bright); letter-spacing: .22em; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, .scene h2 { font-size: clamp(3rem, 7vw, 7.6rem); line-height: 1.05; margin-bottom: 26px; }
+    .scene p { max-width: 550px; color: var(--paper-muted); font-size: clamp(1rem, 1.5vw, 1.2rem); }
+    .scene:nth-child(even) .scene-copy { margin-right: auto; text-align: left; }
+    .scene:nth-child(2) { --x: 62%; --glow: rgba(161,54,62,.42); --car-opacity: .75; }
+    .scene:nth-child(3) { --x: 48%; --glow: rgba(180,164,140,.18); --car-opacity: .82; }
+    .scene:nth-child(4) { --x: 68%; --glow: rgba(115,68,48,.34); --car-opacity: .70; }
+    .scene:nth-child(5) { --x: 30%; --glow: rgba(125,21,32,.48); --car-opacity: .88; }
+    .scene:nth-child(6) { --x: 52%; --glow: rgba(218,168,116,.28); --car-opacity: .94; }
+    .chapter-dots {
+      position: fixed;
+      z-index: 20;
+      left: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: grid;
+      gap: 10px;
+    }
+    .chapter-dots a { width: 8px; height: 8px; border-radius: 50%; background: #80786d; }
+    .chapter-dots a:hover { background: var(--wine-bright); transform: scale(1.4); }
+
+    section.content { padding: 110px 0; }
+    .section-head { display: flex; justify-content: space-between; gap: 40px; align-items: end; margin-bottom: 44px; }
+    .section-head h2 { font-size: clamp(2.2rem, 4.8vw, 5rem); line-height: 1.15; margin-bottom: 0; }
+    .section-head p { color: var(--paper-muted); max-width: 520px; margin-bottom: 0; }
+    .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+    .filter {
+      border: 1px solid var(--line);
+      background: transparent;
+      padding: 9px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .filter.active, .filter:hover { background: var(--paper); color: var(--ink); }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .car-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .car-visual {
+      height: 250px;
+      position: relative;
+      background: radial-gradient(circle at 50% 45%, rgba(125,40,48,.5), transparent 36%), linear-gradient(145deg,#29231f,#0a0a0a);
+    }
+    .car-visual::before {
+      content: "";
+      position: absolute;
+      inset: 35% 12% 18%;
+      transform: skewX(-13deg);
+      border-radius: 58% 50% 18% 18%;
+      background: linear-gradient(175deg, transparent 0 28%, #aaa2 29%, #171615 43% 100%);
+      box-shadow: 0 24px 28px #0009;
+    }
+    .car-info { padding: 22px; }
+    .car-info h3 { margin-bottom: 4px; font-size: 1.35rem; }
+    .car-info p { color: var(--paper-muted); min-height: 58px; font-size: .9rem; }
+    .meta { display: flex; justify-content: space-between; color: #d5cbbd; font-size: .86rem; }
+    .details { width: 100%; margin-top: 18px; padding: 11px; border: 1px solid var(--line); background: transparent; border-radius: 12px; cursor: pointer; }
+    .details:hover { background: var(--wine); }
+    .services { background: #e9e1d5; color: #161513; }
+    .services .section-head p { color: #5d574f; }
+    .service-list { border-top: 1px solid #16151330; }
+    .service-item { border-bottom: 1px solid #16151330; }
+    .service-item button {
+      width: 100%; border: 0; background: transparent; padding: 22px 0;
+      display: flex; justify-content: space-between; cursor: pointer; text-align: right; font-weight: 700;
+    }
+    .service-item p { display: none; color: #625b53; max-width: 720px; padding-bottom: 20px; }
+    .service-item.open p { display: block; }
+    .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+    .stat { background: var(--ink); padding: 35px 20px; }
+    .stat strong { display: block; font-size: 2rem; color: var(--paper); }
+    .stat span { color: var(--paper-muted); font-size: .86rem; }
+    .contact { text-align: center; background: radial-gradient(circle, #5e1c23, #17120f 55%, #0d0d0d); }
+    .contact h2 { font-size: clamp(2.5rem, 6vw, 6rem); line-height: 1.15; }
+    .cta { display: inline-flex; margin-top: 20px; padding: 14px 28px; border-radius: 999px; background: var(--paper); color: var(--ink); }
+    footer { padding: 36px 0; border-top: 1px solid var(--line); color: var(--paper-muted); }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; }
+
+    dialog { border: 1px solid var(--line); border-radius: 22px; background: #1a1816; color: var(--paper); width: min(560px, calc(100% - 32px)); padding: 0; }
+    dialog::backdrop { background: #000b; backdrop-filter: blur(5px); }
+    .modal-inner { padding: 28px; }
+    .modal-top { display: flex; justify-content: space-between; gap: 20px; }
+    .close { border: 1px solid var(--line); background: transparent; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+
+    @media (max-width: 850px) {
+      .nav-links { display: none; position: absolute; top: 72px; inset-inline: 20px; padding: 20px; border: 1px solid var(--line); background: #141311; border-radius: 18px; flex-direction: column; }
+      .nav-links.open { display: flex; }
+      .menu-toggle { display: block; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .section-head { display: block; }
+      .section-head h2 { margin-bottom: 18px; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .chapter-dots { display: none; }
+    }
+    @media (max-width: 580px) {
+      .container { width: min(100% - 28px, 1180px); }
+      .brand small { display: none; }
+      .scene { min-height: 88vh; }
+      .scene::before { width: 112vw; height: 38vw; top: 59%; opacity: .52; }
+      .scene-copy { padding-block: 130px 70px; }
+      h1, .scene h2 { font-size: clamp(2.7rem, 14vw, 4.5rem); }
+      .scene:nth-child(even) .scene-copy { text-align: right; }
+      section.content { padding: 78px 0; }
+      .grid { grid-template-columns: 1fr; }
+      .car-visual { height: 220px; }
+      .footer-inner { display: block; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .scene::after { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="#top" class="brand"><span data-fa="نوا موتورز" data-en="NAVA MOTORS">نوا موتورز</span><small>NAVA MOTORS</small></a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#top" data-fa="خانه" data-en="Home">خانه</a>
+        <a href="#vehicles" data-fa="خودروها" data-en="Vehicles">خودروها</a>
+        <a href="#services" data-fa="خدمات" data-en="Services">خدمات</a>
+        <a href="#about" data-fa="درباره ما" data-en="About">درباره ما</a>
+        <a href="#contact" data-fa="تماس" data-en="Contact">تماس</a>
+      </nav>
+      <div class="lang" aria-label="Language">
+        <button class="active" data-lang="fa">FA</button><button data-lang="en">EN</button>
+      </div>
+      <button class="menu-toggle" id="menuToggle" data-fa="فهرست" data-en="Menu">فهرست</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <nav class="chapter-dots" aria-label="فصل‌ها">
+      <a href="#scene1"></a><a href="#scene2"></a><a href="#scene3"></a><a href="#scene4"></a><a href="#scene5"></a><a href="#scene6"></a>
+    </nav>
+    <div class="hero">
+      <article class="scene" id="scene1"><div class="container"><div class="scene-copy"><div class="scene-count">01 — NAVA</div><h1 data-fa="از سایه تا جاده" data-en="From shadow to road">از سایه تا جاده</h1><p data-fa="در تاریکی نزدیک به سیاه، فقط یک خط نور روی شانهٔ بدنه می‌لغزد. خودرو تازه دارد دیده می‌شود." data-en="In near-black darkness, one line of light crosses the body. The vehicle begins to appear.">در تاریکی نزدیک به سیاه، فقط یک خط نور روی شانهٔ بدنه می‌لغزد. خودرو تازه دارد دیده می‌شود.</p></div></div></article>
+      <article class="scene" id="scene2"><div class="container"><div class="scene-copy"><div class="scene-count">02 — LIGHT</div><h2 data-fa="نور، امضای حرکت" data-en="Light, the signature of motion">نور، امضای حرکت</h2><p data-fa="چراغ‌ها بیدار می‌شوند و امضای نوری نازک، پیش از حرکت، مسیر را نشان می‌دهد." data-en="The lights awaken and draw the road before motion begins.">چراغ‌ها بیدار می‌شوند و امضای نوری نازک، پیش از حرکت، مسیر را نشان می‌دهد.</p></div></div></article>
+      <article class="scene" id="scene3"><div class="container"><div class="scene-copy"><div class="scene-count">03 — FORM</div><h2 data-fa="هر خط، برای عبور" data-en="Every line, shaped to move">هر خط، برای عبور</h2><p data-fa="هر خط بدنه برای عبور از هوا کشیده شده است. نمای جانبی در آرامش کامل آشکار می‌شود." data-en="Every body line is drawn to pass through air. The profile appears in complete calm.">هر خط بدنه برای عبور از هوا کشیده شده است. نمای جانبی در آرامش کامل آشکار می‌شود.</p></div></div></article>
+      <article class="scene" id="scene4"><div class="container"><div class="scene-copy"><div class="scene-count">04 — CABIN</div><h2 data-fa="آرامش درون" data-en="Calm within">آرامش درون</h2><p data-fa="چرم گرافیتی، دوخت عاجی و بافت چوب، سکوت کابین را کامل می‌کنند." data-en="Graphite leather, ivory stitching and wood texture complete the quiet cabin.">چرم گرافیتی، دوخت عاجی و بافت چوب، سکوت کابین را کامل می‌کنند.</p></div></div></article>
+      <article class="scene" id="scene5"><div class="container"><div class="scene-copy"><div class="scene-count">05 — DETAIL</div><h2 data-fa="قدرت در جزئیات" data-en="Power lives in detail">قدرت در جزئیات</h2><p data-fa="نوار نور عقب روشن می‌شود و نور شرابی روی گلگیر عقب حرکت می‌کند." data-en="The rear light bar glows and burgundy light moves across the body.">نوار نور عقب روشن می‌شود و نور شرابی روی گلگیر عقب حرکت می‌کند.</p></div></div></article>
+      <article class="scene" id="scene6"><div class="container"><div class="scene-copy"><div class="scene-count">06 — ROAD</div><h2 data-fa="مسیر از اینجا آغاز می‌شود" data-en="The road begins here">مسیر از اینجا آغاز می‌شود</h2><p data-fa="سالن به جاده باز می‌شود. همان خودرو در نور سپیده آرام دور می‌شود." data-en="The showroom opens onto the road. The same car moves quietly into dawn.">سالن به جاده باز می‌شود. همان خودرو در نور سپیده آرام دور می‌شود.</p><a class="cta" href="#contact" data-fa="رزرو بازدید" data-en="Book a viewing">رزرو بازدید</a></div></div></article>
+    </div>
+
+    <div class="demo-note" data-fa="این یک پروتوتایپ آزمایشی است؛ همهٔ خودروها، قیمت‌ها و مشخصات ساختگی هستند." data-en="This is an experimental prototype; all vehicles, prices and specifications are fictional.">این یک پروتوتایپ آزمایشی است؛ همهٔ خودروها، قیمت‌ها و مشخصات ساختگی هستند.</div>
+
+    <section class="content" id="vehicles">
+      <div class="container">
+        <div class="section-head"><div><div class="eyebrow">THE NAVA COLLECTION</div><h2 data-fa="شش خودرو، شش شخصیت" data-en="Six cars, six characters">شش خودرو، شش شخصیت</h2></div><p data-fa="خودروی مناسب مسیر خود را میان مجموعهٔ آزمایشی نوا پیدا کنید." data-en="Find the vehicle that fits your road in the fictional NAVA collection.">خودروی مناسب مسیر خود را میان مجموعهٔ آزمایشی نوا پیدا کنید.</p></div>
+        <div class="filters" role="group" aria-label="فیلتر بدنه">
+          <button class="filter active" data-filter="all" data-fa="همه" data-en="All">همه</button>
+          <button class="filter" data-filter="sedan" data-fa="سدان" data-en="Sedan">سدان</button>
+          <button class="filter" data-filter="suv" data-fa="شاسی‌بلند" data-en="SUV">شاسی‌بلند</button>
+          <button class="filter" data-filter="coupe" data-fa="کوپه" data-en="Coupe">کوپه</button>
+          <button class="filter" data-filter="roadster" data-fa="رودستر" data-en="Roadster">رودستر</button>
+        </div>
+        <div class="grid" id="vehicleGrid"></div>
+      </div>
+    </section>
+
+    <section class="content services" id="services">
+      <div class="container">
+        <div class="section-head"><div><div class="eyebrow">PRIVATE SERVICE</div><h2 data-fa="از بازدید تا تحویل" data-en="From viewing to delivery">از بازدید تا تحویل</h2></div><p data-fa="شش گام روشن و ساده برای تجربه‌ای آرام از انتخاب خودرو." data-en="Six clear steps for a calm, considered vehicle experience.">شش گام روشن و ساده برای تجربه‌ای آرام از انتخاب خودرو.</p></div>
+        <div class="service-list">
+          <div class="service-item open"><button><span data-fa="۱ — بازدید خصوصی" data-en="1 — Private viewing">۱ — بازدید خصوصی</span><span>+</span></button><p data-fa="سالن در ساعت توافق‌شده برای بازدید شما آماده می‌شود." data-en="The showroom is prepared for your appointment at the agreed time.">سالن در ساعت توافق‌شده برای بازدید شما آماده می‌شود.</p></div>
+          <div class="service-item"><button><span data-fa="۲ — مشاورهٔ تخصصی خرید" data-en="2 — Purchase consultation">۲ — مشاورهٔ تخصصی خرید</span><span>+</span></button><p data-fa="تفاوت نسخه‌ها، امکانات و هزینهٔ نگهداری شفاف توضیح داده می‌شود." data-en="Versions, features and ownership costs are explained clearly.">تفاوت نسخه‌ها، امکانات و هزینهٔ نگهداری شفاف توضیح داده می‌شود.</p></div>
+          <div class="service-item"><button><span data-fa="۳ — سند و انتقال قانونی" data-en="3 — Legal transfer">۳ — سند و انتقال قانونی</span><span>+</span></button><p data-fa="هماهنگی مراحل سند و انتقال مالکیت به‌صورت یکپارچه انجام می‌شود." data-en="Documentation and ownership transfer are coordinated end to end.">هماهنگی مراحل سند و انتقال مالکیت به‌صورت یکپارچه انجام می‌شود.</p></div>
+          <div class="service-item"><button><span data-fa="۴ — بیمه و بدنه" data-en="4 — Insurance">۴ — بیمه و بدنه</span><span>+</span></button><p data-fa="پوشش‌های بیمه‌ای برای انتخاب آگاهانه مقایسه می‌شوند." data-en="Insurance options are compared for an informed choice.">پوشش‌های بیمه‌ای برای انتخاب آگاهانه مقایسه می‌شوند.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content" id="about">
+      <div class="container">
+        <div class="section-head"><div><div class="eyebrow">WHY NAVA</div><h2 data-fa="روش کار ما" data-en="Our approach">روش کار ما</h2></div><p data-fa="اعداد زیر صرفاً نمایشی‌اند و برای نسخهٔ آزمایشی نوشته شده‌اند." data-en="The figures below are fictional and included for this prototype only.">اعداد زیر صرفاً نمایشی‌اند و برای نسخهٔ آزمایشی نوشته شده‌اند.</p></div>
+        <div class="stats"><div class="stat"><strong>۱۲</strong><span data-fa="سال فعالیت آزمایشی" data-en="demo years">سال فعالیت آزمایشی</span></div><div class="stat"><strong>۲۸۰۰</strong><span data-fa="تحویل نمایشی" data-en="demo deliveries">تحویل نمایشی</span></div><div class="stat"><strong>۴۰</strong><span data-fa="بازدید در ماه" data-en="monthly viewings">بازدید در ماه</span></div><div class="stat"><strong>۱۸۰</strong><span data-fa="نقطهٔ بازرسی" data-en="inspection points">نقطهٔ بازرسی</span></div></div>
+      </div>
+    </section>
+
+    <section class="content contact" id="contact">
+      <div class="container"><div class="eyebrow">PRIVATE APPOINTMENT</div><h2 data-fa="برای دیدن، نه فقط نگاه کردن" data-en="To experience, not just look">برای دیدن، نه فقط نگاه کردن</h2><p data-fa="این فرم و شماره‌ها در نسخهٔ آزمایشی غیرفعال‌اند." data-en="Contact actions are disabled in this prototype.">این فرم و شماره‌ها در نسخهٔ آزمایشی غیرفعال‌اند.</p><a class="cta" href="#top" data-fa="بازگشت به بالا" data-en="Back to top">بازگشت به بالا</a></div>
+    </section>
+  </main>
+
+  <footer><div class="container footer-inner"><strong>نوا موتورز — NAVA MOTORS</strong><span data-fa="پروتوتایپ آزمایشی، بدون وابستگی به برند واقعی" data-en="Experimental prototype, not affiliated with a real brand">پروتوتایپ آزمایشی، بدون وابستگی به برند واقعی</span></div></footer>
+
+  <dialog id="vehicleDialog"><div class="modal-inner"><div class="modal-top"><div><div class="eyebrow">NAVA PRIVATE COLLECTION</div><h2 id="modalTitle"></h2></div><button class="close" aria-label="بستن">×</button></div><p id="modalText"></p><div class="meta"><span id="modalType"></span><strong id="modalPrice"></strong></div></div></dialog>
+
+  <script>
+    const vehicles = [
+      {name:'نوا آرکا', en:'NAVA ARKA', type:'sedan', typeFa:'سدان', price:'۴٫۸۵ میلیارد تومان', desc:'سدان پرچم‌دار با فاصلهٔ محوری بلند، مناسب سفرهای طولانی و رانندگی روزمره.'},
+      {name:'نوا کویر', en:'NAVA KAVIR', type:'suv', typeFa:'شاسی‌بلند', price:'۶٫۳۲ میلیارد تومان', desc:'شاسی‌بلند میان‌رده با ارتفاع فرمان بالا و کابین آرام برای مسیرهای ناهموار.'},
+      {name:'نوا موج', en:'NAVA MOJ', type:'coupe', typeFa:'کوپه', price:'۵٫۴۱ میلیارد تومان', desc:'کوپهٔ دو در با سقف کوتاه و فرم کشیده برای جاده‌های خلوت.'},
+      {name:'نوا زاگرس', en:'NAVA ZAGROS', type:'suv', typeFa:'شاسی‌بلند', price:'۷٫۱۵ میلیارد تومان', desc:'شاسی‌بلند هفت‌نفره با فاصلهٔ محوری بلند برای خانواده و سفر.'},
+      {name:'نوا نیلا', en:'NAVA NILA', type:'sedan', typeFa:'سدان', price:'۳٫۹۸ میلیارد تومان', desc:'سدان جمع‌وجور شهری با مصرف کم برای رفت‌وآمد روزانه.'},
+      {name:'نوا رهام', en:'NAVA RAHAM', type:'roadster', typeFa:'رودستر', price:'۸٫۹۴ میلیارد تومان', desc:'رودستر دونفره با کابین باز، سبک و بی‌واسطه.'}
+    ];
+    const grid = document.getElementById('vehicleGrid');
+    const dialog = document.getElementById('vehicleDialog');
+    function render(filter='all') {
+      grid.innerHTML = vehicles.filter(v => filter === 'all' || v.type === filter).map((v,i) => `
+        <article class="car-card"><div class="car-visual" style="filter:hue-rotate(${i*7}deg)"></div><div class="car-info"><div class="eyebrow">${v.en}</div><h3>${v.name}</h3><p>${v.desc}</p><div class="meta"><span>${v.typeFa}</span><strong>${v.price}</strong></div><button class="details" data-index="${vehicles.indexOf(v)}">جزئیات خودرو</button></div></article>`).join('');
+    }
+    render();
+    document.querySelectorAll('.filter').forEach(btn => btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); render(btn.dataset.filter);
+    }));
+    grid.addEventListener('click', e => {
+      const btn = e.target.closest('.details'); if (!btn) return;
+      const v = vehicles[btn.dataset.index];
+      modalTitle.textContent = v.name; modalText.textContent = v.desc; modalType.textContent = v.typeFa; modalPrice.textContent = v.price; dialog.showModal();
+    });
+    document.querySelector('.close').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
+    document.querySelectorAll('.service-item button').forEach(btn => btn.addEventListener('click', () => btn.parentElement.classList.toggle('open')));
+    menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.addEventListener('click', () => navLinks.classList.remove('open'));
+    document.querySelectorAll('.lang button').forEach(btn => btn.addEventListener('click', () => {
+      const lang = btn.dataset.lang;
+      document.documentElement.lang = lang; document.documentElement.dir = lang === 'fa' ? 'rtl' : 'ltr';
+      document.querySelectorAll('[data-fa]').forEach(el => el.textContent = el.dataset[lang]);
+      document.querySelectorAll('.lang button').forEach(b => b.classList.toggle('active', b === btn));
+    }));
+  </script>
+</body>
+</html>
